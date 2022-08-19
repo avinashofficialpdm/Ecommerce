@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="row">
+    <div class="col-4"></div>
+    <div class="col-4 loginc">
+      <h2>Welcome to E-Cart Login.....!</h2>
+      <pre></pre>
+      <form [formGroup]="loginForm">
+        <div>
+          <label for="username">Username</label>
+          <input type="text" id="username" class="form-control" formControlName='username' name="username"
+            [class.is-invalid]="loginForm.get('username')?.invalid && loginForm.get('username')?.touched">
+        </div>
+        <div>
+          <label for="pswd">Password</label>
+          <input type="password" id="pswd" class="form-control" formControlName='password'
+            [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+        </div>
+        <pre></pre>
+        <button type="submit" class="btn btn-success form-control btn-sm" (click)="login()">Login</button>
+        <pre></pre>
+        <div>
+          <p> Don't have an account?</p>
+          <button class="btn btn-dark btn-sm form-control" routerLink="/register">Sign Up</button>
+        </div>
+      </form>
+    </div>
+    <div class="col-4"></div>
+  </div>
+
+</div>

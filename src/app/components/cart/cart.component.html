@@ -1,0 +1,45 @@
+<app-header></app-header>
+
+  <div class="container">
+    <div class="row">
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Product Image</th>
+            <th> Product Name</th>
+            <th>Product Price</th>
+            <th>Quantity</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let item of cartProducts">
+          <td> <img src="{{item.img}}" style="height: 50px; width: 50px;"></td>
+          <td>{{item.pname}}</td>
+          <td>{{item.countprice}}</td>
+          <td>
+            <button type="button" style="border: 1px solid blue ;" (click)="minus(item.id)" ><i class="fa fa-minus"></i></button>
+            <!-- <input type="text" style="width: 30px; border: 1px solid blue;" [value]="item.count"> -->
+            <span>{{item.count}}</span>
+            <button type="button" style="border: 1px solid blue;" (click)="plus(item.id)"><i class="fa fa-plus"></i></button>
+          </td>
+          <td>
+            <button type="button" class="btn btn-danger btn-sm" (click)="deleteItem(item.id)">Delete</button>
+          </td>
+        </tbody>
+      </table>
+  
+  
+    </div>
+    <div class="row">
+      <div class="col-6"></div>
+      <div class="col-5"></div>
+      <div class="col-1">
+        <label for="total"> <strong> Total Price</strong></label>
+        <input type="text" id="total" class="form-control" [(ngModel)]="totalprice">
+      </div>
+    </div>
+  </div>
+ 
+
+

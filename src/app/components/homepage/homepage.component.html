@@ -1,0 +1,45 @@
+<app-header></app-header>
+
+<div class="container-fluid">
+  <pre></pre>
+  <div class="row">
+    <div class="col-9"></div>
+    <div class="col-1">
+      <button type="button" class="btn btn-warning" *ngIf="loggedOut" routerLink="cart">View Cart</button>
+    </div>
+    <div class="col-1">
+      <button type="button" class="btn btn-warning" *ngIf="loggedOut" routerLink="wishlist">Wishlist</button>
+    </div>
+    <div class="col-1">
+      <button type="button" class="btn btn-danger" *ngIf="loggedOut" (click)="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12" *ngIf="loggedOut">
+      <h1 style="font-family:cursive; font-size: larger; text-align: justify; color: rgb(24, 24, 26);">
+        Hai {{currentUser.name}} Welcome to E-cart</h1>
+      <img src="{{currentUser.image}}" alt="" style="height: 100px; width: 200px;">
+      
+    </div>
+    <!-- <div class="col-10" *ngIf="loggedOut">
+      <img src="{{currentUser.image}}" alt="" style="height: 100px; width: 200px;">
+    </div> -->
+  </div>
+
+  <div class="row">
+    <ng-container *ngFor="let item of productList">
+
+      <div class="card col-md-3" style="width: 18rem;">
+        <img src={{item.img}} class="card-img-top m-2" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">{{item.pname}}</h5>
+          <p class="card-text">{{item.price}}</p>
+          <button class="btn btn-primary btn-sm m-2" (click)="loggedIn(item)">Add to Cart</button>
+          <button class="btn btn-primary btn-sm" (click)="logWishlist(item)">Add to Wishlist</button>
+        </div>
+      </div>
+    </ng-container>
+
+  </div>
+</div>

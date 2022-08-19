@@ -1,0 +1,48 @@
+
+  <div class="container">
+    <div class="row">
+      <div class="col-2"></div>
+      <div class="col-6 reg">
+        <h2> Register Now....!</h2>
+        <form [formGroup]="registrationForm">
+          <div class="form-group">
+            <label for="name"> <strong>Name</strong> </label>
+            <input type="text" id="name"  class="form-control" formControlName='name'>
+            <div *ngIf="validate.name?.invalid && validate.name?.touched">
+              <small class="text-danger" *ngIf="validate.name?.errors?.['required']">Name is required</small>
+              <small class="text-danger" *ngIf="validate.name?.errors?.['pattern']">Please Enter valid Name</small>
+            </div>
+          </div>
+
+
+
+          <div class="form-group">
+            <label for="uname"> <strong>Username</strong> </label>
+            <input type="text" id="uname"  class="form-control" formControlName='username'>
+            <div *ngIf="validate.username?.invalid && validate.username?.touched">
+              <small class="text-danger" *ngIf="validate.username?.errors?.['required']">Username is Required</small>
+              <small class="text-danger" *ngIf="validate.username?.errors?.['minlength']">Username must contain atleast 4 characters </small>
+              <small class="text-danger" *ngIf="validate.username?.errors?.['pattern']">Enter valid Username</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="pswd"> <strong>Password</strong> </label>
+            <input type="password" id="pswd"  class="form-control" formControlName='password'>
+            <div *ngIf="validate.password?.invalid && validate.password?.touched">
+              <small class="text-danger" *ngIf="validate.password?.errors?.['required']">Password required</small>
+            </div>
+          </div>
+
+          <div>
+            <label for="propic"> <strong>Profile Photo</strong> </label>
+            <input type="file" name="profilephoto" id="propic" class="form-control" (change)="onSelectfile($event)">
+          </div>
+          <pre></pre>
+
+          <button type="submit" class="btn btn-success"  (click)="register()">Register</button>
+        </form>
+      </div>
+      <div class="col-4"></div>
+    </div>
+  </div>

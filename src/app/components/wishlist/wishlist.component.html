@@ -1,0 +1,35 @@
+<!-- <app-header></app-header> -->
+
+<div class="container-fluid m-3">
+  <div class="row">
+    <div class="col-11"></div>
+    <div class="col-1"> <button class="btn btn-warning" routerLink="/cart">View Cart</button> </div>
+  </div>
+</div>
+
+<div class="container m-4">
+  <div class="row m-3">
+    <h2 style="text-align: center; color: rgb(36, 33, 33);">Lists</h2>
+    <h3 style="text-align: center;">For All Your Shopping Needs</h3>
+    <pre></pre>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Product Image</th>
+          <th> Product Name</th>
+          <th>Product Price</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let item of wishlistProducts">
+        <td> <img src="{{item.img}}" style="height: 50px; width: 50px;"> </td>
+        <td>{{item.pname}}</td>
+        <td>{{item.price}} </td>
+        <td>
+          <button type="button" class="btn btn-success btn-sm m-2" (click)="wishtocart(item)">Add to Cart</button>
+          <button type="button" class="btn btn-warning btn-sm" (click)="deletewishlist(item.id)">Delete</button>
+        </td>
+      </tbody>
+    </table>
+  </div>
+</div>
