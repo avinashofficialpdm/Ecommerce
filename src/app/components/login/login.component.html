@@ -16,7 +16,7 @@
             [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
         </div>
         <pre></pre>
-        <button type="submit" class="btn btn-success form-control btn-sm" (click)="login()">Login</button>
+        <button type="submit" class="btn btn-success form-control btn-sm" [disabled]="loginForm.invalid" (click)="login()">Login</button>
         <pre></pre>
         <div>
           <p> Don't have an account?</p>

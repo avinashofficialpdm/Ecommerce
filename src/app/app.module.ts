@@ -14,7 +14,7 @@ import { CartComponent } from './components/cart/cart.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome'
-import { BehavioursubjectService } from './services/behavioursubject.service';
+import { CountService } from './services/count.service';
 
 @NgModule({
   declarations: [
@@ -36,7 +36,7 @@ import { BehavioursubjectService } from './services/behavioursubject.service';
     FormsModule
    
   ],
-  providers: [ BehavioursubjectService],
+  providers: [ CountService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

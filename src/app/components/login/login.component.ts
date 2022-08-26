@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ServiceService } from 'src/app/services/service.service';
+import { EcartService } from 'src/app/services/ecart.service';
 import { elementAt } from 'rxjs';
+import { user } from 'src/app/models/user';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +12,6 @@ import { elementAt } from 'rxjs';
 })
 export class LoginComponent implements OnInit {
   loggedUsername: any
-  loggedUserId: any
 
   // form control.....
   loginForm = this.fb.group({
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   })
 
 
-  constructor(private rout: Router, private fb: FormBuilder, private serv: ServiceService) { }
+  constructor(private rout: Router, private fb: FormBuilder, private serv: EcartService) { }
 
   ngOnInit() {
   }
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
   login() {
     this.serv.getUsers().subscribe((res: any) => {
       if (res.find((element: any) => element.username == this.loginForm.value.username)) {
-        let currentUser = res.find((element: any) => element.username == this.loginForm.value.username)
+        let currentUser = res.find((element:any) => element.username == this.loginForm.value.username)
         if (currentUser.password == this.loginForm.value.password) {
           this.loggedUsername = this.loginForm.value.username
           localStorage.setItem('token', this.loggedUsername)

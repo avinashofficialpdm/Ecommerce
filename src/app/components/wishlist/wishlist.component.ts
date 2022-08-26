@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { BehavioursubjectService } from 'src/app/services/behavioursubject.service';
-import { ServiceService } from 'src/app/services/service.service';
+import { user } from 'src/app/models/user';
+import { userproduct } from 'src/app/models/userproduct';
+import { CountService } from 'src/app/services/count.service';
+import { EcartService } from 'src/app/services/ecart.service';
 
 @Component({
   selector: 'app-wishlist',
@@ -10,11 +12,12 @@ import { ServiceService } from 'src/app/services/service.service';
 })
 export class WishlistComponent implements OnInit {
 
-  wishlistProducts:any[]=[]
-  currentUser:any
-  wishlistItem:any
+  wishlistProducts:userproduct[]=[]
+  currentUser?:string | null
+  currentUserDetails:user=new user()
+  wishlistItem:userproduct =new userproduct()
 
-  constructor(private serv:ServiceService , private rout:Router,private behavserv:BehavioursubjectService) { }
+  constructor(private serv:EcartService , private rout:Router,private behavserv:CountService) { }
 
   ngOnInit() {
 
@@ -23,11 +26,14 @@ export class WishlistComponent implements OnInit {
     this.currentUser=localStorage.getItem('token')
 
     this.serv.getUsers().subscribe((ele:any)=>{
-      this.currentUser = ele.find((element: any) => element.username == this.currentUser)
+      this.currentUserDetails = ele.find((element: any) => element.username == this.currentUser)
 
-      this.wishlistProducts=this.currentUser.wishlist
+      this.wishlistProducts=this.currentUserDetails.wishlist
       console.log(this.wishlistProducts);
-      
+      this.behavserv.sendWishlistItems(this.currentUserDetails.wishlist.length)
+      this.behavserv.sendCartItems(this.currentUserDetails.cart.length)
+
+
     })
 
 }
@@ -38,23 +44,26 @@ wishtocart(item:any)
   this.wishlistItem=item
   if(localStorage.getItem('token')){
     
-    let productincart= this.currentUser.cart.find((ele:any)=>ele.id == this.wishlistItem.id)
-    let wishproductindex = this.currentUser.wishlist.findIndex((ele:any)=>ele.id == this.wishlistItem.id)
+    let productincart= this.currentUserDetails.cart.find((ele:any)=>ele.id == this.wishlistItem.id)
+    let wishproductindex = this.currentUserDetails.wishlist.findIndex((ele:any)=>ele.id == this.wishlistItem.id)
     console.log(wishproductindex);
     
     if(productincart){
       alert("Item already exist on Cart")
     }
     else{
+    
       this.wishlistItem.count = 1;
       this.wishlistItem.countprice = this.wishlistItem.price
-      this.currentUser.cart.push(this.wishlistItem)
-      this.currentUser.wishlist.splice(wishproductindex,1)
+      this.currentUserDetails.cart.push(this.wishlistItem)
+      this.currentUserDetails.wishlist.splice(wishproductindex,1)
       alert("Item Successfully added to cart")
       // this.rout.navigateByUrl('cart')
-      console.log(this.currentUser);
-      this.serv.wishList( this.currentUser.id ,  this.currentUser) 
-      this.behavserv.sendCartItems(this.currentUser.cart.length)
+      console.log(this.currentUserDetails);
+      this.serv.wishList( this.currentUserDetails.id ,  this.currentUserDetails) 
+      this.behavserv.sendCartItems(this.currentUserDetails.cart.length)
+      this.behavserv.sendWishlistItems(this.currentUserDetails.wishlist.length)
+
 
     }
     
@@ -65,9 +74,10 @@ deletewishlist(id:any)
 {
   
   this.serv.getUsers().subscribe((item:any)=>{
-    let index = this.currentUser.wishlist.findIndex((ele:any)=>ele.id == id)
-    this.currentUser.wishlist.splice(index,1)
-    this.serv.deleteWishlistItem(this.currentUser.id,this.currentUser)
+    let index = this.currentUserDetails.wishlist.findIndex((ele:any)=>ele.id == id)
+    this.currentUserDetails.wishlist.splice(index,1)
+    this.behavserv.sendWishlistItems(this.currentUserDetails.wishlist.length)
+    this.serv.deleteWishlistItem(this.currentUserDetails.id,this.currentUserDetails)
   })
 }
 }

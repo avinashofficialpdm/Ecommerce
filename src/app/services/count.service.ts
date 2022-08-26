@@ -3,9 +3,10 @@ import { BehaviorSubject, Subject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class BehavioursubjectService {
+export class CountService {
 
   public behaviourSubjectCart = new BehaviorSubject<number>(0)
+  public behaviourSubjectWishlist = new BehaviorSubject<number>(0)
 
 constructor() { }
 
@@ -15,6 +16,12 @@ constructor() { }
 
     this.behaviourSubjectCart.next(data)
     
+  }
+
+  sendWishlistItems(data:any){
+    console.log(data);
+    
+    this.behaviourSubjectWishlist.next(data)
   }
 
 }

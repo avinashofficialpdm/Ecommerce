@@ -1,6 +1,6 @@
 <!-- navigation bar -->
 <header>
-  <nav class="navbar navbar-dark bg-primary">
+  <nav class="navbar navbar-dark bg-primary container-fluid">
 
     <div class="row">
       <div class="col-12">
@@ -21,6 +21,12 @@
       <div class="col-3">
         <button type="button" class="btn btn-dark btn-sm">Cart <span class="badge badge-light">{{countofCart}}</span>
         </button>
+      
+      </div>
+
+      <div class="col-3">
+        <button type="button" class="btn btn-dark btn-sm">Wishlist <span class="badge badge-light">{{countofWishlist}}</span>
+        </button>
       </div>
 
       <!-- <div class="col-4">
@@ -32,7 +38,7 @@
       </div> -->
 
       <div class="col-5">
-        <button type="button" class="btn btn-success" routerLink="login">Login</button>
+        <button type="button" class="btn btn-success" *ngIf="loggedOut" routerLink="login">Login</button>
       </div>
     </div>
 

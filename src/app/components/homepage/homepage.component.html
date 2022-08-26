@@ -1,5 +1,4 @@
 <app-header></app-header>
-
 <div class="container-fluid">
   <pre></pre>
   <div class="row">
@@ -18,13 +17,11 @@
   <div class="row">
     <div class="col-12" *ngIf="loggedOut">
       <h1 style="font-family:cursive; font-size: larger; text-align: justify; color: rgb(24, 24, 26);">
-        Hai {{currentUser.name}} Welcome to E-cart</h1>
-      <img src="{{currentUser.image}}" alt="" style="height: 100px; width: 200px;">
-      
+        Hai {{currentUserDetails.name}} Welcome to E-cart</h1>
+      <img src="{{currentUserDetails.image}}" alt="" style="height: 200px; width: 200px; border-radius: 50%;">
+
     </div>
-    <!-- <div class="col-10" *ngIf="loggedOut">
-      <img src="{{currentUser.image}}" alt="" style="height: 100px; width: 200px;">
-    </div> -->
+
   </div>
 
   <div class="row">
@@ -43,3 +40,5 @@
 
   </div>
 </div>
+
+<app-footer></app-footer>

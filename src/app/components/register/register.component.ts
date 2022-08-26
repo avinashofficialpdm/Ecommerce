@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ServiceService } from 'src/app/services/service.service';
+import { EcartService } from 'src/app/services/ecart.service';
 import { FormControl,FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -10,7 +10,7 @@ import { FormControl,FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class RegisterComponent implements OnInit {
 
-  imageUrl:any
+  imageUrl?:string
 
   get validate()
   {
@@ -24,13 +24,13 @@ export class RegisterComponent implements OnInit {
     image:new FormControl('')
   })
 
-  constructor(private serv:ServiceService,private rout:Router) { }
+  constructor(private serv:EcartService,private rout:Router) { }
 
   ngOnInit() {
   }
 
   onSelectfile(event:any)
-  {
+  {        
     if(event.target.files){
       let reader = new FileReader()
       reader.readAsDataURL(event.target.files[0])
@@ -45,6 +45,8 @@ export class RegisterComponent implements OnInit {
     this.registrationForm.value.image = this.imageUrl
     console.log(this.registrationForm.value);
     this.serv.registerUser(this.registrationForm.value).subscribe(item=>{
+      console.log(item);
+      
       alert("Register Successfully")
       this.rout.navigateByUrl('login')
     })

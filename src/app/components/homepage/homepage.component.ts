@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { BehavioursubjectService } from 'src/app/services/behavioursubject.service';
-import { ServiceService } from 'src/app/services/service.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { user } from 'src/app/models/user';
+import { userproduct } from 'src/app/models/userproduct';
+import { CountService } from 'src/app/services/count.service';
+import { EcartService } from 'src/app/services/ecart.service';
 
 @Component({
   selector: 'app-homepage',
@@ -11,49 +13,52 @@ import { ServiceService } from 'src/app/services/service.service';
 export class HomepageComponent implements OnInit {
   productList: any[] = []
   loggedOut: boolean = false
-  currentUser: any
-  cartProduct: any
-  wishlistProduct: any
+  currentUser: string | null =''
+  currentUserDetails: user =new user()
+  cartProduct?: userproduct
+  wishlistProduct: userproduct | undefined
 
-  constructor(private serv: ServiceService, private rout: Router, private behavserv: BehavioursubjectService) { }
+  constructor(private serv:EcartService, private rout: Router, private behavserv: CountService,
+    private activ: ActivatedRoute) { }
 
   ngOnInit() {
-    this.serv.getProduct().subscribe((res: any) => {
-      this.productList = res
-      console.log(this.productList);
-    })
+
+    // from resolve
+    this.productList = this.activ.snapshot.data['product']
+
     // logout button visible or not
     if (localStorage.getItem('token')) {
       this.loggedOut = true
     }
     // add to cart
     this.currentUser = localStorage.getItem('token')
-    this.serv.getUsers().subscribe((res: any) => {
-      this.currentUser = res.find((element: any) => element.username == this.currentUser)
-     
-      // behavior sbjct call
-      this.behavserv.sendCartItems(this.currentUser.cart.length)
-    })
+    // resolve
+    let allUserDetails = this.activ.snapshot.data['userdetails']
+    this.currentUserDetails = allUserDetails.find((element: user) => element.username == this.currentUser)
+    
+    this.behavserv.sendCartItems(this.currentUserDetails.cart.length)
+    this.behavserv.sendWishlistItems(this.currentUserDetails.wishlist.length)
   }
-// Add to cart from homepage
-  loggedIn(item: Object) {
+
+  // Add to cart from homepage
+  loggedIn(item: userproduct) {
 
     if (localStorage.getItem('token')) {
       this.cartProduct = item
-    
-// check if the product is already exist or not
-      let cartindex = this.currentUser.cart.find((element: any) => element.id == this.cartProduct.id)
+
+      // check if the product is already exist or not
+      let cartindex = this.currentUserDetails.cart.find((element: userproduct) => element.id == this.cartProduct?.id)
       if (cartindex) {
         alert("Item already exist..")
       }
       else {
         this.cartProduct.count = 1;
         this.cartProduct.countprice = this.cartProduct.price
-        this.currentUser.cart.push(this.cartProduct)
-        this.behavserv.sendCartItems(this.currentUser.cart.length)
+        this.currentUserDetails.cart.push(this.cartProduct)
+        this.behavserv.sendCartItems(this.currentUserDetails.cart.length)
       }
-// add items to cart and update the cart
-      this.serv.cartUpdate(localStorage.getItem('id'), this.currentUser)
+      // add items to cart and update the cart
+      this.serv.cartUpdate(localStorage.getItem('id'), this.currentUserDetails)
       this.rout.navigateByUrl('cart')
       return true
     }
@@ -64,27 +69,32 @@ export class HomepageComponent implements OnInit {
     }
   }
 
-// add to wishlist from homepage
-  logWishlist(item: any) {
+  // add to wishlist from homepage
+  logWishlist(item: userproduct) {
     console.log(item);
     if (localStorage.getItem('token')) {
-      this.serv.wishList(localStorage.getItem('id'), this.currentUser)
+      this.serv.wishList(localStorage.getItem('id'), this.currentUserDetails)
       this.wishlistProduct = item
 
-      let proexist = this.currentUser.wishlist.find((ele: any) => ele.id == this.wishlistProduct.id)
+      let proexist = this.currentUserDetails.wishlist.find((ele: userproduct) => ele.id == this.wishlistProduct?.id)
       console.log(proexist);
       if (proexist) {
         alert("Item already exist..");
       }
       else {
-        this.wishlistProduct.count = 1;
-        this.wishlistProduct.countprice = this.wishlistProduct.price
-        this.currentUser.wishlist.push(this.wishlistProduct)
-        alert("Item successfully added")
+        if(this.wishlistProduct){
+          this.wishlistProduct.count = 1;
+          this.wishlistProduct.countprice = this.wishlistProduct.price
+          this.currentUserDetails.wishlist.push(this.wishlistProduct)
+  
+          this.behavserv.sendWishlistItems(this.currentUserDetails.wishlist.length)
+          alert("Item successfully added")
+        }
+       
       }
       console.log(this.wishlistProduct);
 
-      this.serv.wishList(localStorage.getItem('id'), this.currentUser)
+      this.serv.wishList(localStorage.getItem('id'), this.currentUserDetails)
       // this.rout.navigateByUrl('wishlist')
       return true
     }
@@ -99,8 +109,7 @@ export class HomepageComponent implements OnInit {
 
   logout() {
     localStorage.removeItem('token')
-    this.rout.navigateByUrl('home')
-    window.location.reload()
+    location.replace('')
   }
 
 }

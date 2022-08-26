@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
-import { BehavioursubjectService } from 'src/app/services/behavioursubject.service';
+import { CountService } from 'src/app/services/count.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -8,21 +8,23 @@ import { BehavioursubjectService } from 'src/app/services/behavioursubject.servi
 })
 export class HeaderComponent implements OnInit {
 
-  loggedOut:boolean=false
+  loggedOut:boolean=true
   countofCart:any
+  countofWishlist:any
 
-  constructor(private behavserv:BehavioursubjectService){}
+  constructor(private behavserv:CountService){}
 
   ngOnInit() {
 
     if(localStorage.getItem('token')){
-      this.loggedOut = true;
+      this.loggedOut = false;
     }
     else{
-      this.loggedOut=false
+      this.loggedOut=true
     }
 
     this.behavserv.behaviourSubjectCart.subscribe(number=>{this.countofCart=number})
+    this.behavserv.behaviourSubjectWishlist.subscribe(number=>{this.countofWishlist=number})
   }
 
  
